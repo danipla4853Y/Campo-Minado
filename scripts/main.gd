@@ -1,8 +1,23 @@
 extends Node2D
 
-const tile = preload("res://scenes/tile.tscn")
-const hole = preload("res://scenes/hole.tscn")
-const bomb = preload("res://scenes/bomb.tscn")
+const tile = preload("res://Campo-Minado/scenes/tile.tscn")
+const hole = preload("res://Campo-Minado/scenes/hole.tscn")
+const bomb = preload("res://Campo-Minado/scenes/bomb.tscn")
+const one = preload("res://Campo-Minado/assets/sprites/spr_one.png")
+const two = preload("res://Campo-Minado/assets/sprites/spr_two.png")
+const three = preload("res://Campo-Minado/assets/sprites/spr_three.png")
+const four = preload("res://Campo-Minado/assets/sprites/spr_four.png")
+const five = preload("res://Campo-Minado/assets/sprites/spr_five.png")
+const six = preload("res://Campo-Minado/assets/sprites/spr_six.png")
+const seven = preload("res://Campo-Minado/assets/sprites/spr_seven.png")
+
+
+
+
+
+
+
+
 const grid_x = 1
 const grid_y = 1
 
@@ -23,7 +38,7 @@ func _input(event: InputEvent) -> void:
 
 func set_tiles():
 	# Variables
-	var grid = select_grid('Easy')
+	var grid = select_grid('Teste')
 	var _bombs = round((grid[1]*grid[0])*0.15)
 	
 	var centralize_x = (DisplayServer.window_get_size().x/2) - (32*(grid[1]/2))
@@ -32,17 +47,20 @@ func set_tiles():
 	var _y = centralize_y
 	var _grid_x = grid_x
 	var _grid_y = grid_y 
+	var a = 0
 	
 	#Definir a posição das bombas
-	for i in range(_bombs+1):
-		var place = randi_range(1,80)
-		if place not in bombs_list:
+	while a < (_bombs):
+		var place = randi_range(1,grid[0]*grid[1])
+		if place in bombs_list:
+			continue
+		else:
 			bombs_list.append(place)
-	
+			a +=1
 	
 	#Posicionar tiles
 	for i in range(1,grid[0]*grid[1]+1):
-		var _tile = instanciate_obj(tile,_x,_y,i)
+		var _tile = instanciate_obj(tile,_x,_y)
 		
 		_tile.name = 'T' + str(i)
 		
@@ -53,7 +71,7 @@ func set_tiles():
 			
 		#Se tiver bomba
 		if tiles_list[i-1][1]:
-			var _bomb = instanciate_obj(bomb,_x,_y,i)
+			var _bomb = instanciate_obj(bomb,_x,_y)
 			_bomb.name = 'B' + str(i)
 			
 			#Processo para substituir os números pelas próprias bombas
@@ -64,12 +82,13 @@ func set_tiles():
 			add_child(_bomb)
 		#Se não tiver bomba
 		else:
-			var _hole = instanciate_obj(hole,_x,_y,i)
+			var _hole = instanciate_obj(hole,_x,_y)
 			_hole.name = 'H' + str(i)
 			
+		
 			#Instanciar hole
 			add_child(_hole)
-			holes_list.append([_hole,_grid_x,_grid_y])
+			holes_list.append([_hole,_grid_x,_grid_y,0])
 			
 		#Instanciar tile
 		add_child(_tile)
@@ -82,8 +101,30 @@ func set_tiles():
 			_x = centralize_x
 			_grid_x = grid_x
 			_grid_y += 1
-			
-	count_bombs()
+	
+	
+	for i in range(len(holes_list)-1):
+		var count = 0
+		count = count_bombs(count,i)
+		print(count)
+		holes_list[i][3] = count
+		
+		var spr = holes_list[i][0].get_node("Sprite")
+		match count: 
+			1:
+				spr.set_texture(one)
+			2:
+				spr.set_texture(two)
+			3:
+				spr.set_texture(three)
+			4:
+				spr.set_texture(four)
+			5:
+				spr.set_texture(five)
+			6:
+				spr.set_texture(six)
+			7:
+				spr.set_texture(seven)
 func check_mouse_click ():
 	var click = Input.is_action_just_released("left_mouse_button", true) 
 	var mouse_position = get_viewport().get_mouse_position()
@@ -98,54 +139,49 @@ func check_mouse_click ():
 			var check_y = (tiley < mouse_position.y and mouse_position.y < (tiley + 32) == true)
 			
 			if  check_x and check_y == true:
-				#tile[0].free()
-				#tiles_list.erase(tile)
-				print('x = ', tile[2],'y = ',tile[3])
-				#if tile[1]:
-					#game_over()
+				tile[0].free()
+				tiles_list.erase(tile)
+				if tile[1]:
+					game_over()
 
-func instanciate_obj(obj,_x,_y,i):
+func instanciate_obj(obj,_x,_y):
 	var _tile = obj.instantiate()
 	_tile.position.x = _x
 	_tile.position.y = _y
 	return _tile
 
-func count_bombs():
-	#Colocar coordenadas de cada tile como se fosse um grid na lista de tiles
-	pass
-	'''
-	var count = 0
-	for bomb in bombs_list:
-		print(bomb[1])
-		for a in range(8):
-			if (bomb[1]+posbl_bombs[a]) >= 0:
-				'''
+func count_bombs(count,i):
+	count += test_bombs(i,1)
+	count += test_bombs(i,0)
+	count += test_bombs(i,-1)
+	return count
+
 func select_grid(game_dif):
 	if game_dif == 'Easy':
 		return [8,10]
-
+	
+	elif game_dif == 'Teste':
+		return [3,6]
+		
+	
 	elif game_dif == 'Medium':
 		return [10,12]
 		
 	else:
-		return [12,14]			
-			
-				
-		
-			
-				
-			
-		
-			
-		
-		
-		
-		 
-			
-		
-		
-	
-	
+		return [12,14]
 
 func game_over():
 	get_tree().quit()
+
+func test_bombs(i,y):
+	var count = 0
+	for x in range(-1,2):
+		var _grid_x_hole = holes_list[i][1]+x
+		var _grid_y_hole = holes_list[i][2]+y
+		for f in range(len(bombs_list)):
+			var bomb_x = bombs_list[f][1] 
+			var bomb_y = bombs_list[f][2] 
+			if bomb_x == _grid_x_hole and bomb_y == _grid_y_hole :
+				count += 1
+	return count
+		
