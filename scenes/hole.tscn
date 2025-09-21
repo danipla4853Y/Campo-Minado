@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://wjslnho17god"]
+
+[ext_resource type="Texture2D" uid="uid://yahonomt5avs" path="res://Campo-Minado/assets/sprites/spr_hole.png" id="1_lerre"]
+
+[node name="Hole" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(16, 16)
+texture = ExtResource("1_lerre")

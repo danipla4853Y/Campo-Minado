@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1o266i73x3fb"]
+
+[ext_resource type="Texture2D" uid="uid://dm82lyiygdc7y" path="res://Campo-Minado/assets/sprites/spr_bomb.png" id="1_4kkau"]
+
+[node name="Bomb" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(16, 16)
+texture = ExtResource("1_4kkau")
