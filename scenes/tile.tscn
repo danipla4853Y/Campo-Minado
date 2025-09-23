@@ -1,10 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://b241c8ck02465"]
+[gd_scene load_steps=3 format=3 uid="uid://b241c8ck02465"]
 
-[ext_resource type="Texture2D" uid="uid://bgo8uctq0ibr6" path="res://Campo-Minado/assets/sprites/spr_Tile.png" id="1_2sjy5"]
+[ext_resource type="Texture2D" uid="uid://bk34xch3k122" path="res://Campo-Minado/assets/sprites/spr_Tile.png" id="1_2sjy5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dh47f"]
+size = Vector2(32, 32)
 
 [node name="Tile" type="Node2D"]
 
-[node name="spr_tile" type="Sprite2D" parent="."]
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(16, 16)
+shape = SubResource("RectangleShape2D_dh47f")
+
+[node name="spr_tile" type="Sprite2D" parent="StaticBody2D"]
 position = Vector2(16, 16)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_2sjy5")
