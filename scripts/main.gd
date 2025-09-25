@@ -1,72 +1,71 @@
 extends Node2D
 
 
-const tile = preload("res://Campo-Minado/scenes/tile.tscn")
-const hole = preload("res://Campo-Minado/scenes/hole.tscn")
-const bomb = preload("res://Campo-Minado/scenes/bomb.tscn")
-const one = preload("res://Campo-Minado/assets/sprites/spr_one.png")
-const two = preload("res://Campo-Minado/assets/sprites/spr_two.png")
-const three = preload("res://Campo-Minado/assets/sprites/spr_three.png")
-const four = preload("res://Campo-Minado/assets/sprites/spr_four.png")
-const five = preload("res://Campo-Minado/assets/sprites/spr_five.png")
-const six = preload("res://Campo-Minado/assets/sprites/spr_six.png")
-const seven = preload("res://Campo-Minado/assets/sprites/spr_seven.png")
+const tile : Resource = preload("res://Campo-Minado/scenes/tile.tscn")
+const hole : Resource = preload("res://Campo-Minado/scenes/hole.tscn")
+const bomb : Resource = preload("res://Campo-Minado/scenes/bomb.tscn")
+const one : Resource = preload("res://Campo-Minado/assets/sprites/spr_one.png")
+const two : Resource = preload("res://Campo-Minado/assets/sprites/spr_two.png")
+const three : Resource = preload("res://Campo-Minado/assets/sprites/spr_three.png")
+const four : Resource = preload("res://Campo-Minado/assets/sprites/spr_four.png")
+const five : Resource = preload("res://Campo-Minado/assets/sprites/spr_five.png")
+const six : Resource = preload("res://Campo-Minado/assets/sprites/spr_six.png")
+const seven : Resource = preload("res://Campo-Minado/assets/sprites/spr_seven.png")
 
-const grid_x = 1
-const grid_y = 1
+const grid_x : int = 1
+const grid_y : int = 1
 
-var tiles_list = []
-var bombs_list = []
-var holes_list = []
-var nobomb_list = []
+var tiles_list : Array = []
+var bombs_list : Array = []
+var holes_list : Array = []
+var nobomb_list : Array = []
 
-var grid = select_grid('Easy')
-var click_count = 0
-var _bombs = round((grid[1]*grid[0])*0.15)
-var first_click = 0
+var grid : Array = select_grid('Easy')
+var click_count : int = 0
+var bombs : int = round((grid[1]*grid[0])*0.15)
+var first_click : Array = []
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	set_tiles()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if click_count == 1:
-		bombs_position(_bombs)
+		bombs_position(bombs)
 		click_count += 1
-		for tile in tiles_list:
-			var _x = tile[0].position.x
-			var _y = tile[0].position.y
-			if [tile[1],tile[2]] in bombs_list:
-				tile[3] = true
-				var _bomb = instanciate_obj(bomb,_x,_y)
+		for _tile : Array in tiles_list:
+			var _x : int = _tile[0].position.x
+			var _y : int  = _tile[0].position.y
+			if [_tile[1],_tile[2]] in bombs_list:
+				_tile[3] = true
+				var _bomb : Object= instanciate_obj(bomb,_x,_y)
 				_bomb.name = 'B' + str(tiles_list.find(tile)+1)
 				add_child(_bomb)
 			else:
-				var _hole = instanciate_obj(hole,_x,_y)
+				var _hole : Object= instanciate_obj(hole,_x,_y)
 				_hole.name = 'H' + str(tiles_list.find(tile)+1)
-				holes_list.append([_hole,tile[1],tile[2]])
+				holes_list.append([_hole,_tile[1],_tile[2]])
 				add_child(_hole)
 				
 		
 		holes_count()
 
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	check_mouse_click()
 
-func set_tiles():
+func set_tiles() -> void:
 	# Variables
-	
-	var centralize_x = (DisplayServer.window_get_size().x/2) - (32*(grid[1]/2))
-	var centralize_y = (DisplayServer.window_get_size().y/2) - (32*(grid[0]/2))
-	var _x = centralize_x
-	var _y = centralize_y
-	var _grid_x = grid_x
-	var _grid_y = grid_y 
+	var centralize_x :int = (DisplayServer.window_get_size().x/2.0) - (32*(grid[1]/2))
+	var centralize_y :int = (DisplayServer.window_get_size().y/2.0) - (32*(grid[0]/2))
+	var _x:int = centralize_x
+	var _y:int = centralize_y
+	var _grid_x:int = grid_x
+	var _grid_y:int = grid_y 
 	
 	#Definir a posição das bombas
 	#Posicionar tiles
 	for i in range(1,grid[0]*grid[1]+1):
-		var _tile = instanciate_obj(tile,_x,_y)
+		var _tile : Object = instanciate_obj(tile,_x,_y)
 		_tile.name = 'T' + str(i)
 		tiles_list.append([_tile,_grid_x,_grid_y,false])
 		
@@ -83,45 +82,45 @@ func set_tiles():
 			_grid_y += 1
 	
 
-func check_mouse_click ():
-	var click = Input.is_action_just_released("left_mouse_button", true) 
-	var mouse_position = get_viewport().get_mouse_position()
+func check_mouse_click() -> void:
+	var click : bool = Input.is_action_just_released("left_mouse_button", true) 
+	var mouse_position : Vector2 = get_viewport().get_mouse_position()
 
 	if click:
-		for tile in tiles_list:
-			var tilex = tile[0].position.x
-			var tiley = tile[0].position.y
+		for _tile : Array in tiles_list:
+			var tilex : int = _tile[0].position.x
+			var tiley : int= _tile[0].position.y
 			
 			#Esquações booleanas
-			var check_x = (tilex < mouse_position.x and mouse_position.x < (tilex + 32) == true)
-			var check_y = (tiley < mouse_position.y and mouse_position.y < (tiley + 32) == true)
+			var check_x : bool= (tilex < mouse_position.x and mouse_position.x < (tilex + 32) == true)
+			var check_y : bool= (tiley < mouse_position.y and mouse_position.y < (tiley + 32) == true)
 			
 			if  check_x and check_y == true:
-				tile[0].free()
-				tiles_list.erase(tile)
-				if tile[3]:
+				_tile[0].free()
+				tiles_list.erase(_tile)
+				if _tile[3]:
 					game_over()
 				if click_count == 0:
-					var first_hole = instanciate_obj(hole,tilex,tiley)
+					var first_hole : Object = instanciate_obj(hole,tilex,tiley)
 					first_hole.name = 'H' + str(tiles_list.find(tile)+1)
 					add_child(first_hole)
-					first_click = tile
-					deny_bombs(tile)
+					first_click = _tile
+					deny_bombs(_tile)
 					click_count += 1
 				
-func instanciate_obj(obj,_x,_y):
-	var _tile = obj.instantiate()
+func instanciate_obj(obj : Resource,_x : int,_y : int) -> Object:
+	var _tile : Object = obj.instantiate()
 	_tile.position.x = _x
 	_tile.position.y = _y
 	return _tile
 
-func count_bombs(count,i):
+func count_bombs(count : int,i : int) -> int:
 	count += test_bombs(i,1)
 	count += test_bombs(i,0)
 	count += test_bombs(i,-1)
 	return count
 
-func select_grid(game_dif):
+func select_grid(game_dif : String) -> Array:
 	if game_dif == 'Easy':
 		return [8,10]
 	
@@ -135,30 +134,30 @@ func select_grid(game_dif):
 	else:
 		return [12,14]
 
-func game_over():
-	get_tree().quit()
+func game_over() -> void:
+	get_tree().reload_current_scene()
  
-func test_bombs(i,y):
-	var count = 0
+func test_bombs(i : int,y : int) -> int:
+	var count : int = 0
 	for x in range(-1,2):
-		var _grid_x_hole = holes_list[i][1]+x
-		var _grid_y_hole = holes_list[i][2]+y
+		var _grid_x_hole : int = holes_list[i][1]+x
+		var _grid_y_hole : int = holes_list[i][2]+y
 		#print(_grid_x_hole,', ',_grid_y_hole)
 		for f in range(len(bombs_list)):
-			var bomb_x = bombs_list[f][0]
-			var bomb_y = bombs_list[f][1]
+			var bomb_x : int= bombs_list[f][0]
+			var bomb_y : int = bombs_list[f][1]
 			if bomb_x == _grid_x_hole and bomb_y == _grid_y_hole :
 				count += 1
 				
 	return count
 		
-func bombs_position(_bombs):
-	var a = 0
+func bombs_position(_bombs : int) -> void:
+	var a : int = 0
 	
 	while a < (_bombs):
-		var place_x = randi_range(1,grid[1])
-		var place_y =  randi_range(1,grid[0])
-		var place = [place_x,place_y]
+		var place_x : int = randi_range(1,grid[1])
+		var place_y : int =  randi_range(1,grid[0])
+		var place : Array = [place_x,place_y]
 		
 		if place in bombs_list or place in nobomb_list:
 			continue
@@ -168,21 +167,21 @@ func bombs_position(_bombs):
 			a +=1
 
 
-func deny_bombs(first_tile):
+func deny_bombs(first_tile: Array) -> Array:
 	for y in range(-1,2):
 		for x in range(-1,2):
-			var x_tile = first_tile[1]+x
-			var y_tile = first_tile[2]+y
+			var x_tile : int = first_tile[1]+x
+			var y_tile :int = first_tile[2]+y
 			
 			nobomb_list.append([x_tile,y_tile])
 	return nobomb_list
 			
-func holes_count():
+func holes_count() -> void:
 	#Textura dos holes
 	for i in range(len(holes_list)-1):
-		var count = 0
+		var count : int= 0
 		count = count_bombs(count,i)
-		var spr = holes_list[i][0].get_node("Sprite")
+		var spr : Sprite2D = holes_list[i][0].get_node("Sprite")
 		match count: 
 			
 			1:
