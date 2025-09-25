@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b1o266i73x3fb"]
 
-[ext_resource type="Texture2D" uid="uid://dm82lyiygdc7y" path="res://Campo-Minado/assets/sprites/spr_bomb.png" id="1_4kkau"]
+[ext_resource type="Texture2D" uid="uid://bgsfqwtjyd7la" path="res://Campo-Minado/assets/sprites/spr_bomb.png" id="1_4kkau"]
 
 [node name="Bomb" type="Node2D"]
 

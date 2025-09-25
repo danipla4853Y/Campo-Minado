@@ -11,6 +11,7 @@ const four : Resource = preload("res://Campo-Minado/assets/sprites/spr_four.png"
 const five : Resource = preload("res://Campo-Minado/assets/sprites/spr_five.png")
 const six : Resource = preload("res://Campo-Minado/assets/sprites/spr_six.png")
 const seven : Resource = preload("res://Campo-Minado/assets/sprites/spr_seven.png")
+const file : String = "res://Campo-Minado/data/vitorias-seguidas.txt"
 
 const grid_x : int = 1
 const grid_y : int = 1
@@ -20,17 +21,23 @@ var bombs_list : Array = []
 var holes_list : Array = []
 var nobomb_list : Array = []
 
-var grid : Array = select_grid('Easy')
+var grid : Array = select_grid('Teste')
 var click_count : int = 0
 var bombs : int = round((grid[1]*grid[0])*0.15)
 var first_click : Array = []
+var vitorias : int = load_file()
+
 # Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
 	set_tiles()
+	print('Vitorias: ',vitorias)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	
 	if click_count == 1:
+		print('beta')
 		bombs_position(bombs)
 		click_count += 1
 		for _tile : Array in tiles_list:
@@ -49,7 +56,6 @@ func _process(_delta: float) -> void:
 				
 		
 		holes_count()
-
 func _input(_event: InputEvent) -> void:
 	check_mouse_click()
 
@@ -80,13 +86,12 @@ func set_tiles() -> void:
 			_x = centralize_x
 			_grid_x = grid_x
 			_grid_y += 1
-	
 
 func check_mouse_click() -> void:
 	var click : bool = Input.is_action_just_released("left_mouse_button", true) 
 	var mouse_position : Vector2 = get_viewport().get_mouse_position()
 
-	if click:
+	if click == true:
 		for _tile : Array in tiles_list:
 			var tilex : int = _tile[0].position.x
 			var tiley : int= _tile[0].position.y
@@ -100,14 +105,20 @@ func check_mouse_click() -> void:
 				tiles_list.erase(_tile)
 				if _tile[3]:
 					game_over()
-				if click_count == 0:
+				elif click_count == 0:
 					var first_hole : Object = instanciate_obj(hole,tilex,tiley)
 					first_hole.name = 'H' + str(tiles_list.find(tile)+1)
 					add_child(first_hole)
 					first_click = _tile
 					deny_bombs(_tile)
+					
 					click_count += 1
 				
+				elif len(tiles_list) == bombs:
+					game_win()
+					
+					
+					
 func instanciate_obj(obj : Resource,_x : int,_y : int) -> Object:
 	var _tile : Object = obj.instantiate()
 	_tile.position.x = _x
@@ -125,7 +136,7 @@ func select_grid(game_dif : String) -> Array:
 		return [8,10]
 	
 	elif game_dif == 'Teste':
-		return [3,6]
+		return [4,6]
 		
 	
 	elif game_dif == 'Medium':
@@ -135,8 +146,37 @@ func select_grid(game_dif : String) -> Array:
 		return [12,14]
 
 func game_over() -> void:
+	vitorias = 0
+	save_file()
 	get_tree().reload_current_scene()
- 
+	
+ 	
+func game_win() -> void:
+	vitorias += 1
+	save_file()
+	print(vitorias)
+	get_tree().reload_current_scene()
+
+func load_file() -> int:
+	var _file : FileAccess = FileAccess.open(file,FileAccess.READ)
+	if _file:
+		if _file.get_length() > 0:
+			vitorias = _file.get_as_text().to_int()
+			print(vitorias)
+		else:
+			print('Arquivo vazio.')
+	_file.close()
+	return vitorias
+
+			
+func save_file() -> void:
+	var _file : FileAccess = FileAccess.open(file,FileAccess.WRITE)
+	if _file:
+		_file.store_string(str(vitorias))
+		
+	else:
+		print('Arquivo nao encontrado')
+		
 func test_bombs(i : int,y : int) -> int:
 	var count : int = 0
 	for x in range(-1,2):
@@ -150,10 +190,10 @@ func test_bombs(i : int,y : int) -> int:
 				count += 1
 				
 	return count
-		
-func bombs_position(_bombs : int) -> void:
+
+func bombs_position(_bombs : int) -> Array:
 	var a : int = 0
-	
+
 	while a < (_bombs):
 		var place_x : int = randi_range(1,grid[1])
 		var place_y : int =  randi_range(1,grid[0])
@@ -164,9 +204,8 @@ func bombs_position(_bombs : int) -> void:
 		else:
 			bombs_list.append(place)
 			
-			a +=1
-
-
+			a += 1
+	return bombs_list
 func deny_bombs(first_tile: Array) -> Array:
 	for y in range(-1,2):
 		for x in range(-1,2):
@@ -175,11 +214,11 @@ func deny_bombs(first_tile: Array) -> Array:
 			
 			nobomb_list.append([x_tile,y_tile])
 	return nobomb_list
-			
+
 func holes_count() -> void:
 	#Textura dos holes
-	for i in range(len(holes_list)-1):
-		var count : int= 0
+	for i in range(len(holes_list)):
+		var count : int = 0
 		count = count_bombs(count,i)
 		var spr : Sprite2D = holes_list[i][0].get_node("Sprite")
 		match count: 
@@ -198,7 +237,3 @@ func holes_count() -> void:
 				spr.set_texture(six)
 			7:
 				spr.set_texture(seven)
-				
-	
-	
-	
