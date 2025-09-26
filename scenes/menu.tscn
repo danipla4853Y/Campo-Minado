@@ -1,0 +1,118 @@
+[gd_scene load_steps=8 format=3 uid="uid://dxr3xehf8fjp7"]
+
+[ext_resource type="Script" uid="uid://8u7gcdgofwq7" path="res://Campo-Minado/scripts/menu.gd" id="1_7tcdm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_riif2"]
+bg_color = Color(0.19226666, 0.28, 0.016800001, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5il5p"]
+bg_color = Color(0.39083338, 0.67, 0, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yyljx"]
+bg_color = Color(0.247, 0.39, 0, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kvk3e"]
+bg_color = Color(0.31033334, 0.49, 0, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5il5p"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7tcdm"]
+bg_color = Color(0.39083338, 0.67, 0, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+script = ExtResource("1_7tcdm")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_riif2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -68.0
+offset_right = 191.5
+offset_bottom = 176.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 11
+
+[node name="start_button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/line_spacing = 9
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_5il5p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_yyljx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kvk3e")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5il5p")
+text = "START GAME"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/line_spacing = 9
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_7tcdm")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_yyljx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kvk3e")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5il5p")
+alignment = 1
+selected = 0
+fit_to_longest_item = false
+item_count = 4
+popup/item_0/text = "Difficulty"
+popup/item_0/id = 0
+popup/item_1/text = "Easy"
+popup/item_1/id = 1
+popup/item_2/text = "Medium"
+popup/item_2/id = 2
+popup/item_3/text = "Hard"
+popup/item_3/id = 3
+
+[node name="exit_button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/line_spacing = 9
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_5il5p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_yyljx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kvk3e")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5il5p")
+text = "EXIT"
+
+[connection signal="pressed" from="VBoxContainer/start_button" to="." method="_on_start_button_pressed"]
+[connection signal="item_selected" from="VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="VBoxContainer/exit_button" to="." method="_on_exit_button_pressed"]

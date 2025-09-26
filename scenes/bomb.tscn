@@ -5,5 +5,4 @@
 [node name="Bomb" type="Node2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(16, 16)
 texture = ExtResource("1_4kkau")

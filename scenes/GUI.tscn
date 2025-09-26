@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cfgk5o5w1j8uj" path="res://Campo-Minado/scripts/gui.gd" id="1_osf8w"]
 
 [node name="Gui" type="Control"]
+show_behind_parent = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,11 +15,12 @@ script = ExtResource("1_osf8w")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Label" type="Label" parent="CanvasLayer"]
-anchors_preset = -1
-anchor_left = 0.51000005
-anchor_right = 0.51000005
-offset_left = -20.52008
-offset_top = 40.0
-offset_right = 21.47992
-offset_bottom = 63.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -21.0
+offset_top = 25.0
+offset_right = 21.0
+offset_bottom = 48.0
 grow_horizontal = 2
+size_flags_vertical = 0

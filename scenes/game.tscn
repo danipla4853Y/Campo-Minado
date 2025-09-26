@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bw7at2t3u2u3l"]
+
+[ext_resource type="Script" uid="uid://dmxio5kxbi03s" path="res://Campo-Minado/scripts/game.gd" id="1_u5drj"]
+[ext_resource type="PackedScene" uid="uid://b60j37beiuwib" path="res://Campo-Minado/scenes/GUI.tscn" id="2_hqecf"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_u5drj")
+
+[node name="Gui" parent="." instance=ExtResource("2_hqecf")]
+z_index = -2
+metadata/_edit_use_anchors_ = true
