@@ -1,6 +1,7 @@
 extends Control
 const game : String = 'res://Campo-Minado/scenes/game.tscn'
-
+const secret : Resource = preload("res://Campo-Minado/assets/sprites/spr_secret.png")
+var count_secret : int = 0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
@@ -21,3 +22,16 @@ func _on_option_button_item_selected(index: int) -> void:
 
 func _on_exit_button_pressed() -> void:
 	get_tree().quit()
+
+
+func _on_button_pressed() -> void:
+	count_secret +=1
+	if count_secret == 10:
+		$Panel/Secret.show_behind_parent = false
+	if count_secret == 15:
+		$VBoxContainer.visible = false
+	if count_secret == 20:
+		$Panel/Secret.show_behind_parent = true
+		$VBoxContainer.visible = true
+		count_secret = 0
+		
