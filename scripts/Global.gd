@@ -5,6 +5,7 @@ const file : String = "res://Campo-Minado/data/vitorias-seguidas.txt"
 const tile : Resource = preload("res://Campo-Minado/scenes/tile.tscn")
 const hole : Resource = preload("res://Campo-Minado/scenes/hole.tscn")
 const bomb : Resource = preload("res://Campo-Minado/scenes/bomb.tscn")
+const banner : Resource = preload("res://Campo-Minado/scenes/banner.tscn")
 const one : Resource = preload("res://Campo-Minado/assets/sprites/spr_one.png")
 const two : Resource = preload("res://Campo-Minado/assets/sprites/spr_two.png")
 const three : Resource = preload("res://Campo-Minado/assets/sprites/spr_three.png")

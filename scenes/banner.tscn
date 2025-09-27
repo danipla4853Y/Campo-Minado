@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7nsae2g6pl6g"]
+
+[ext_resource type="Texture2D" uid="uid://wsna0gypgl7r" path="res://Campo-Minado/assets/sprites/spr_banner.png" id="1_weewf"]
+
+[node name="Banner" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_weewf")

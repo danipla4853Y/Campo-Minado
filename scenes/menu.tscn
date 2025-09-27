@@ -1,8 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://dxr3xehf8fjp7"]
+[gd_scene load_steps=13 format=3 uid="uid://dxr3xehf8fjp7"]
 
 [ext_resource type="Script" uid="uid://8u7gcdgofwq7" path="res://Campo-Minado/scripts/menu.gd" id="1_7tcdm"]
 [ext_resource type="Texture2D" uid="uid://yncjb712cvtx" path="res://Campo-Minado/assets/sprites/spr_menu-bg.png" id="2_kvk3e"]
 [ext_resource type="Texture2D" uid="uid://bmaf5t4c0xhp7" path="res://Campo-Minado/assets/sprites/spr_secret.png" id="3_yyljx"]
+[ext_resource type="FontFile" uid="uid://csxu84dfwnwbl" path="res://Campo-Minado/assets/fonts/CodeSaver-Regular.otf" id="4_riif2"]
+[ext_resource type="AudioStream" uid="uid://bq0vfvfj8fnca" path="res://Campo-Minado/assets/sounds/animals-auuuuuuuuuu.mp3" id="5_alke7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5il5p"]
 bg_color = Color(0.39083338, 0.67, 0, 1)
@@ -85,20 +87,42 @@ position = Vector2(576, 324.00003)
 scale = Vector2(0.384, 0.38411382)
 texture = ExtResource("3_yyljx")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Label" type="Label" parent="Panel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -192.0
-offset_top = -68.0
-offset_right = 191.5
-offset_bottom = 176.5
+offset_left = -407.5
+offset_top = -248.0
+offset_right = 407.5
+offset_bottom = -117.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.988, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_riif2")
+theme_override_font_sizes/font_size = 104
+text = "CAMPO DE MINAS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.30729166
+anchor_top = 0.595679
+anchor_right = 0.6918403
+anchor_bottom = 0.595679
+offset_left = -95.0
+offset_top = -96.99997
+offset_right = 96.0
+offset_bottom = 190.42532
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 11
+metadata/_edit_use_anchors_ = true
 
 [node name="start_button" type="Button" parent="VBoxContainer"]
 modulate = Color(1, 1, 1, 0.94509804)
@@ -164,6 +188,13 @@ offset_right = 1138.0
 offset_bottom = 227.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_riif2")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_kvk3e")
+
+[node name="AnimalsAuuuuuuuuuu" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(5, -3.0517578e-05)
+scale = Vector2(1, 1.0000001)
+stream = ExtResource("5_alke7")
+volume_db = -7.429
+parameters/looping = true
 
 [connection signal="pressed" from="VBoxContainer/start_button" to="." method="_on_start_button_pressed"]
 [connection signal="item_selected" from="VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]

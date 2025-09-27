@@ -18,20 +18,22 @@ func _on_option_button_item_selected(index: int) -> void:
 	print(index)
 	Global.choice = 0
 	Global.choice = index
-	
 
 func _on_exit_button_pressed() -> void:
 	get_tree().quit()
-
 
 func _on_button_pressed() -> void:
 	count_secret +=1
 	if count_secret == 10:
 		$Panel/Secret.show_behind_parent = false
-	if count_secret == 15:
 		$VBoxContainer.visible = false
-	if count_secret == 20:
+		$Panel/Label.visible = false
+		$AnimalsAuuuuuuuuuu.play()
+		
+	if count_secret == 15:
 		$Panel/Secret.show_behind_parent = true
 		$VBoxContainer.visible = true
+		$Panel/Label.visible = true
+		$AnimalsAuuuuuuuuuu.stop()
 		count_secret = 0
 		

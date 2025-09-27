@@ -3,11 +3,12 @@ extends Node2D
 const grid_x : int = 1
 const grid_y : int = 1
 
+var banner_postions  : Array = []
 var tiles_list : Array = []
 var bombs_list : Array = []
 var holes_list : Array = []
 var nobomb_list : Array = []
-
+var banner_list : Array = []
 var grid : Array = select_grid(Global.choice)
 var click_count : int = 0
 var bombs : int = round((grid[1]*grid[0])*0.15)
@@ -16,10 +17,10 @@ var first_click : Array = []
 # Called when the node enters the scene tree for the first time.
 
 func _ready() -> void:
-	set_tiles()
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+	set_tiles()	
 	
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta: float) -> void:
 	if click_count == 1:
 		bombs_position(bombs)
 		click_count += 1
@@ -30,14 +31,13 @@ func _process(delta: float) -> void:
 				_tile[3] = true
 				var _bomb : Object= instanciate_obj(Global.bomb,_x,_y)
 				_bomb.name = 'B' + str(tiles_list.find(Global.tile)+1)
-				add_child(_bomb)
+				$layer_3.add_child(_bomb)
 			else:
 				var _hole : Object= instanciate_obj(Global.hole,_x,_y)
 				_hole.name = 'H' + str(tiles_list.find(Global.tile)+1)
 				holes_list.append([_hole,_tile[1],_tile[2]])
-				add_child(_hole)
+				$layer_3.add_child(_hole)
 				
-		
 		holes_count()
 
 func _input(_event: InputEvent) -> void:
@@ -58,9 +58,8 @@ func set_tiles() -> void:
 		var _tile : Object = instanciate_obj(Global.tile,_x,_y)
 		_tile.name = 'T' + str(i)
 		tiles_list.append([_tile,_grid_x,_grid_y,false])
-		
-		add_child(_tile)
-			
+
+		$layer_2.add_child(_tile)
 		#Posicionamento
 		_grid_x +=1
 		_x += 32 
@@ -72,10 +71,12 @@ func set_tiles() -> void:
 			_grid_y += 1
 
 func check_mouse_click() -> void:
-	var click : bool = Input.is_action_just_released("left_mouse_button", true) 
+	var click_1 : bool = Input.is_action_just_released("left_mouse_button", true) 
+	var click_2 : bool = Input.is_action_just_released("right_mouse_button", true) 
+	
 	var mouse_position : Vector2 = get_viewport().get_mouse_position()
 
-	if click == true:
+	if click_1 == true:
 		for _tile : Array in tiles_list:
 			var tilex : int = _tile[0].position.x
 			var tiley : int= _tile[0].position.y
@@ -84,7 +85,8 @@ func check_mouse_click() -> void:
 			var check_x : bool= (tilex-16 < mouse_position.x and mouse_position.x < (tilex + 16) == true)
 			var check_y : bool= (tiley-16 < mouse_position.y and mouse_position.y < (tiley + 16) == true)
 			
-			if  check_x and check_y == true:
+			var check_banner : bool = not([tilex,tiley] in banner_postions)
+			if  (check_x and check_y) and check_banner == true:
 				_tile[0].free()
 				tiles_list.erase(_tile)
 				if _tile[3]:
@@ -92,7 +94,7 @@ func check_mouse_click() -> void:
 				elif click_count == 0:
 					var first_hole : Object = instanciate_obj(Global.hole,tilex,tiley)
 					first_hole.name = 'H' + str(tiles_list.find(Global.tile)+1)
-					add_child(first_hole)
+					$layer_3.add_child(first_hole)
 					first_click = _tile
 					deny_bombs(_tile)
 					
@@ -100,7 +102,34 @@ func check_mouse_click() -> void:
 				
 				elif len(tiles_list) == bombs:
 					game_win()
-
+	if click_2 == true:
+		for _tile : Array in tiles_list:
+			var tilex : int = _tile[0].position.x
+			var tiley : int= _tile[0].position.y
+			#Esquações booleanas
+			var check_x : bool= (tilex-16 < mouse_position.x and mouse_position.x < (tilex + 16) == true)
+			var check_y : bool= (tiley-16 < mouse_position.y and mouse_position.y < (tiley + 16) == true)
+			
+			var check_banner : bool = ([tilex,tiley] in banner_postions)
+			
+			if  check_x and check_y == true:
+				if not check_banner:
+					var banner : Object = instanciate_obj(Global.banner,tilex,tiley)
+				
+					if _tile in tiles_list:
+						
+						banner_list.append(banner)
+						banner_postions.append([tilex,tiley])
+						$layer_1.add_child(banner)
+						
+				if check_banner:
+					
+					for banner: Object in banner_list:
+						if  banner.position.x == tilex and banner.position.y == tiley:
+							banner_postions.erase([tilex,tiley])
+							banner.free()
+							banner_list.erase(banner)
+			
 func instanciate_obj(obj : Resource,_x : int,_y : int) -> Object:
 	var _tile : Object = obj.instantiate()
 	_tile.position.x = _x
@@ -150,7 +179,7 @@ func test_bombs(i : int,y : int) -> int:
 		var _grid_x_hole : int = holes_list[i][1]+x
 		var _grid_y_hole : int = holes_list[i][2]+y
 		for f in range(len(bombs_list)):
-			var bomb_x : int= bombs_list[f][0]
+			var bomb_x : int = bombs_list[f][0]
 			var bomb_y : int = bombs_list[f][1]
 			if bomb_x == _grid_x_hole and bomb_y == _grid_y_hole :
 				count += 1
@@ -158,7 +187,6 @@ func test_bombs(i : int,y : int) -> int:
 	return count
 
 func bombs_position(_bombs : int) -> Array:
-	
 	var a : int = 0
 
 	while a < (_bombs):
