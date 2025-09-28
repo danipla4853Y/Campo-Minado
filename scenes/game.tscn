@@ -1,9 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://bw7at2t3u2u3l"]
+[gd_scene load_steps=9 format=3 uid="uid://bw7at2t3u2u3l"]
 
 [ext_resource type="Script" uid="uid://dmxio5kxbi03s" path="res://Campo-Minado/scripts/game.gd" id="1_u5drj"]
 [ext_resource type="PackedScene" uid="uid://b60j37beiuwib" path="res://Campo-Minado/scenes/GUI.tscn" id="2_hqecf"]
 [ext_resource type="Texture2D" uid="uid://cekl6am61s77f" path="res://Campo-Minado/assets/sprites/spr_field.jpg" id="3_u5drj"]
 [ext_resource type="AudioStream" uid="uid://dkkivtkof1qej" path="res://Campo-Minado/assets/sounds/i-am-atomic-made-with-Voicemod.mp3" id="4_hqecf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hqecf"]
+bg_color = Color(1.9974261e-06, 0.586614, 0.18895978, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gad8s"]
+bg_color = Color(0.26068, 0.49, 0.13719998, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4uuwc"]
+bg_color = Color(0, 0.28, 0.08866665, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hqecf"]
 texture = ExtResource("3_u5drj")
@@ -18,6 +27,25 @@ layer = 10
 [node name="Gui" parent="layer_1" instance=ExtResource("2_hqecf")]
 z_index = -2
 metadata/_edit_use_anchors_ = true
+
+[node name="Button" type="Button" parent="layer_1"]
+self_modulate = Color(1, 1, 1, 0.74509805)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -79.0
+offset_top = -173.0
+offset_right = 79.0
+offset_bottom = -99.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_hqecf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gad8s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4uuwc")
+text = "LEAVE"
 
 [node name="layer_2" type="CanvasLayer" parent="."]
 layer = 9
@@ -42,4 +70,5 @@ stream = ExtResource("4_hqecf")
 volume_db = 4.971
 panning_strength = 1.47
 
+[connection signal="pressed" from="layer_1/Button" to="." method="_on_button_pressed"]
 [connection signal="finished" from="IAmAtomicMadeWithVoicemod" to="." method="_on_atomic_finished"]

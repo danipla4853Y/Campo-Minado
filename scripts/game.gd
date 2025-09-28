@@ -46,7 +46,7 @@ func _input(_event: InputEvent) -> void:
 
 func set_tiles() -> void:
 	# Variables
-	var centralize_x :int = (DisplayServer.window_get_size().x/2.0) - (32*(grid[0]/2))
+	var centralize_x :int = (DisplayServer.window_get_size().x/2.0) - (32*(grid[0]/2)-16)
 	var centralize_y :int = (DisplayServer.window_get_size().y/2.0) - (32*(grid[1]/2))
 	var _x:int = centralize_x
 	var _y:int = centralize_y
@@ -240,3 +240,9 @@ func holes_count() -> void:
 
 func _on_atomic_finished() -> void:
 	get_tree().change_scene_to_file(Global.lose)
+
+
+func _on_button_pressed() -> void:
+	Global.vitorias = 0
+	save_file()
+	get_tree().change_scene_to_file(Global.main)
