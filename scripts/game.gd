@@ -17,7 +17,7 @@ var verify : bool = false
 # Called when the node enters the scene tree for the first time.
 
 func _ready() -> void:
-	set_tiles()	
+	set_tiles()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -32,6 +32,7 @@ func _process(_delta: float) -> void:
 				var _bomb : Object= instanciate_obj(Global.bomb,_x,_y)
 				_bomb.name = 'B' + str(tiles_list.find(Global.tile)+1)
 				$layer_3.add_child(_bomb)
+				
 			else:
 				var _hole : Object= instanciate_obj(Global.hole,_x,_y)
 				_hole.name = 'H' + str(tiles_list.find(Global.tile)+1)
@@ -79,16 +80,17 @@ func check_mouse_click() -> void:
 		if click_1 == true:
 			for _tile : Array in tiles_list:
 				var tilex : int = _tile[0].position.x
-				var tiley : int= _tile[0].position.y
+				var tiley : int = _tile[0].position.y
 				
-				#Esquações booleanas
-				var check_x : bool= (tilex-16 < mouse_position.x and mouse_position.x < (tilex + 16) == true)
-				var check_y : bool= (tiley-16 < mouse_position.y and mouse_position.y < (tiley + 16) == true)
+				#Equações booleanas
+				var check_x : bool= (tilex - 16 < mouse_position.x and mouse_position.x < (tilex + 16) == true)
+				var check_y : bool= (tiley - 16 < mouse_position.y and mouse_position.y < (tiley + 16) == true)
 				
-				var check_banner : bool = not([tilex,tiley] in banner_postions)
-				if  (check_x and check_y) and check_banner == true:
+				var check_banner : bool = not ([tilex,tiley] in banner_postions)
+				if (check_x and check_y) and check_banner == true:
 					_tile[0].free()
 					tiles_list.erase(_tile)
+					
 					if _tile[3]:
 						verify = true
 						var explosion : Object = instanciate_obj(Global.explosion,tilex,tiley)
@@ -109,7 +111,7 @@ func check_mouse_click() -> void:
 		for _tile : Array in tiles_list:
 			var tilex : int = _tile[0].position.x
 			var tiley : int= _tile[0].position.y
-			#Esquações booleanas
+			#Equações booleanas
 			var check_x : bool= (tilex-16 < mouse_position.x and mouse_position.x < (tilex + 16) == true)
 			var check_y : bool= (tiley-16 < mouse_position.y and mouse_position.y < (tiley + 16) == true)
 			
@@ -125,7 +127,7 @@ func check_mouse_click() -> void:
 						banner_postions.append([tilex,tiley])
 						$layer_1.add_child(banner)
 						
-				if check_banner:
+				else:
 					
 					for banner: Object in banner_list:
 						if  banner.position.x == tilex and banner.position.y == tiley:
@@ -221,7 +223,6 @@ func holes_count() -> void:
 		count = count_bombs(count,i)
 		var spr : Sprite2D = holes_list[i][0].get_node("Sprite")
 		match count: 
-			
 			1:
 				spr.set_texture(Global.one)
 			2:

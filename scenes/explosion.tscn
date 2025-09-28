@@ -102,3 +102,4 @@ script = ExtResource("1_kr0yw")
 position = Vector2(0, -9)
 sprite_frames = SubResource("SpriteFrames_vj4r1")
 animation = &"explosion"
+frame_progress = 0.2452873

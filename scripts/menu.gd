@@ -8,7 +8,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 func _on_start_button_pressed() -> void:
@@ -36,4 +36,3 @@ func _on_button_pressed() -> void:
 		$Panel/Label.visible = true
 		$AnimalsAuuuuuuuuuu.stop()
 		count_secret = 0
-		
