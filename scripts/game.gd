@@ -13,7 +13,7 @@ var grid : Array = select_grid(Global.choice)
 var click_count : int = 0
 var bombs : int = round((grid[1]*grid[0])*0.15)
 var first_click : Array = []
-
+var verify : bool = false
 # Called when the node enters the scene tree for the first time.
 
 func _ready() -> void:
@@ -75,33 +75,36 @@ func check_mouse_click() -> void:
 	var click_2 : bool = Input.is_action_just_released("right_mouse_button", true) 
 	
 	var mouse_position : Vector2 = get_viewport().get_mouse_position()
-
-	if click_1 == true:
-		for _tile : Array in tiles_list:
-			var tilex : int = _tile[0].position.x
-			var tiley : int= _tile[0].position.y
-			
-			#Esquações booleanas
-			var check_x : bool= (tilex-16 < mouse_position.x and mouse_position.x < (tilex + 16) == true)
-			var check_y : bool= (tiley-16 < mouse_position.y and mouse_position.y < (tiley + 16) == true)
-			
-			var check_banner : bool = not([tilex,tiley] in banner_postions)
-			if  (check_x and check_y) and check_banner == true:
-				_tile[0].free()
-				tiles_list.erase(_tile)
-				if _tile[3]:
-					game_over()
-				elif click_count == 0:
-					var first_hole : Object = instanciate_obj(Global.hole,tilex,tiley)
-					first_hole.name = 'H' + str(tiles_list.find(Global.tile)+1)
-					$layer_3.add_child(first_hole)
-					first_click = _tile
-					deny_bombs(_tile)
-					
-					click_count += 1
+	if verify == false:
+		if click_1 == true:
+			for _tile : Array in tiles_list:
+				var tilex : int = _tile[0].position.x
+				var tiley : int= _tile[0].position.y
 				
-				elif len(tiles_list) == bombs:
-					game_win()
+				#Esquações booleanas
+				var check_x : bool= (tilex-16 < mouse_position.x and mouse_position.x < (tilex + 16) == true)
+				var check_y : bool= (tiley-16 < mouse_position.y and mouse_position.y < (tiley + 16) == true)
+				
+				var check_banner : bool = not([tilex,tiley] in banner_postions)
+				if  (check_x and check_y) and check_banner == true:
+					_tile[0].free()
+					tiles_list.erase(_tile)
+					if _tile[3]:
+						verify = true
+						var explosion : Object = instanciate_obj(Global.explosion,tilex,tiley)
+						$layer_1.add_child(explosion)
+						game_over()
+					elif click_count == 0:
+						var first_hole : Object = instanciate_obj(Global.hole,tilex,tiley)
+						first_hole.name = 'H' + str(tiles_list.find(Global.tile)+1)
+						$layer_3.add_child(first_hole)
+						first_click = _tile
+						deny_bombs(_tile)
+						
+						click_count += 1
+					
+					elif len(tiles_list) == bombs:
+						game_win()
 	if click_2 == true:
 		for _tile : Array in tiles_list:
 			var tilex : int = _tile[0].position.x
@@ -158,12 +161,12 @@ func select_grid(game_dif : int) -> Array:
 func game_over() -> void:
 	Global.vitorias = 0
 	save_file()
-	get_tree().change_scene_to_file(Global.main)
+	$IAmAtomicMadeWithVoicemod.play()
 
 func game_win() -> void:
 	Global.vitorias += 1
 	save_file()
-	get_tree().change_scene_to_file(Global.main)
+	get_tree().change_scene_to_file(Global.win)
 
 func save_file() -> void:
 	var _file : FileAccess = FileAccess.open(Global.file,FileAccess.WRITE)
@@ -233,3 +236,7 @@ func holes_count() -> void:
 				spr.set_texture(Global.six)
 			7:
 				spr.set_texture(Global.seven)
+
+
+func _on_atomic_finished() -> void:
+	get_tree().change_scene_to_file(Global.lose)

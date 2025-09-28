@@ -1,7 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://bw7at2t3u2u3l"]
+[gd_scene load_steps=6 format=3 uid="uid://bw7at2t3u2u3l"]
 
 [ext_resource type="Script" uid="uid://dmxio5kxbi03s" path="res://Campo-Minado/scripts/game.gd" id="1_u5drj"]
 [ext_resource type="PackedScene" uid="uid://b60j37beiuwib" path="res://Campo-Minado/scenes/GUI.tscn" id="2_hqecf"]
+[ext_resource type="Texture2D" uid="uid://cekl6am61s77f" path="res://Campo-Minado/assets/sprites/spr_field.jpg" id="3_u5drj"]
+[ext_resource type="AudioStream" uid="uid://dkkivtkof1qej" path="res://Campo-Minado/assets/sounds/i-am-atomic-made-with-Voicemod.mp3" id="4_hqecf"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hqecf"]
+texture = ExtResource("3_u5drj")
+modulate_color = Color(0.55, 0.55, 0.55, 1)
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_u5drj")
@@ -18,3 +24,22 @@ layer = 9
 
 [node name="layer_3" type="CanvasLayer" parent="."]
 layer = 8
+
+[node name="layer_4" type="CanvasLayer" parent="."]
+layer = 7
+
+[node name="Panel" type="Panel" parent="layer_4"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_hqecf")
+
+[node name="IAmAtomicMadeWithVoicemod" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(229, 282)
+stream = ExtResource("4_hqecf")
+volume_db = 4.971
+panning_strength = 1.47
+
+[connection signal="finished" from="IAmAtomicMadeWithVoicemod" to="." method="_on_atomic_finished"]

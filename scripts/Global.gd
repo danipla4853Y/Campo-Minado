@@ -2,6 +2,7 @@ extends Node
 var vitorias : int = load_file()
 var choice : int = 0
 const file : String = "res://Campo-Minado/data/vitorias-seguidas.txt"
+const explosion : Resource = preload("res://Campo-Minado/scenes/explosion.tscn")
 const tile : Resource = preload("res://Campo-Minado/scenes/tile.tscn")
 const hole : Resource = preload("res://Campo-Minado/scenes/hole.tscn")
 const bomb : Resource = preload("res://Campo-Minado/scenes/bomb.tscn")
@@ -14,7 +15,8 @@ const five : Resource = preload("res://Campo-Minado/assets/sprites/spr_five.png"
 const six : Resource = preload("res://Campo-Minado/assets/sprites/spr_six.png")
 const seven : Resource = preload("res://Campo-Minado/assets/sprites/spr_seven.png")
 const main : String = "res://Campo-Minado/scenes/main.tscn"
-
+const win : String = "res://Campo-Minado/scenes/win.tscn"
+const lose : String = "res://Campo-Minado/scenes/lose.tscn"
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
