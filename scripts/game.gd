@@ -237,6 +237,5 @@ func holes_count() -> void:
 			7:
 				spr.set_texture(Global.seven)
 
-
 func _on_atomic_finished() -> void:
 	get_tree().change_scene_to_file(Global.lose)

@@ -12,12 +12,12 @@ modulate_color = Color(0.55, 0.55, 0.55, 1)
 [node name="Game" type="Node2D"]
 script = ExtResource("1_u5drj")
 
-[node name="Gui" parent="." instance=ExtResource("2_hqecf")]
-z_index = -2
-metadata/_edit_use_anchors_ = true
-
 [node name="layer_1" type="CanvasLayer" parent="."]
 layer = 10
+
+[node name="Gui" parent="layer_1" instance=ExtResource("2_hqecf")]
+z_index = -2
+metadata/_edit_use_anchors_ = true
 
 [node name="layer_2" type="CanvasLayer" parent="."]
 layer = 9
